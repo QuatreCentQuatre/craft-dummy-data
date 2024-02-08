@@ -80,8 +80,6 @@ class DummyAssetsService extends Component
 
             return $asset;
         }
-
-            return $asset;
-        }
     }
+    
 }
