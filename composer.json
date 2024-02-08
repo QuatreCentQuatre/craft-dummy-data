@@ -7,8 +7,8 @@
         "email": "production@quatrecentquatre.com"
     },
     "require": {
-        "php": ">=7.3",
-        "craftcms/cms": "^3.5.0",
+        "php": ">=8.0.2",
+        "craftcms/cms": "^4.5.0",
         "fakerphp/faker": "^1.23.1"
     },
     "require-dev": {
