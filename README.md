@@ -109,7 +109,7 @@ For more informations about what kind of data each type return, you can look up 
 - excel (.xlsx)
 - image (.jpg)
 - pdf (.pdf)
-- text (.txt)
+- txt (.txt)
 - word (.docx)
 
 #### Custom value
