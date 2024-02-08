@@ -100,7 +100,6 @@ class GenerateController extends Controller
 
         (new DummyCustomTableService)->clean();
 
-        //@TODO Text
         echo 'Script ended';
     }
 

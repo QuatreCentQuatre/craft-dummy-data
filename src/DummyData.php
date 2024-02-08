@@ -18,8 +18,8 @@ use quatrecentquatre\dummydata\models\Settings;
  */
 class DummyData extends Plugin
 {
-    public string $schemaVersion = '1.0.0';
-    public bool $hasCpSettings = true;
+    public $schemaVersion = '1.0.0';
+    public $hasCpSettings = true;
 
     public static function config(): array
     {
@@ -32,10 +32,7 @@ class DummyData extends Plugin
     {
         parent::init();
 
-        // Defer most setup tasks until Craft is fully initialized
-        Craft::$app->onInit(function() {
-            $this->attachEventHandlers();
-        });
+        $this->attachEventHandlers();
     }
 
     protected function createSettingsModel(): ?Model

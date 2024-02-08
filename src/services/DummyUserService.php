@@ -57,17 +57,14 @@ class DummyUserService extends Component
             $results = Yii::$app->db->createCommand("UPDATE users 
                                         SET username = CONCAT('" . $usernameDefault ."', id), 
                                             email = CONCAT('" . $usernameDefault ."+', id, '@" . $emailDomainDefault . "'),
-                                            fullName = CONCAT('" . $usernameDefault ."', id),
                                             firstName = CONCAT('" . $usernameDefault ."', id),
                                             lastName = CONCAT('" . $usernameDefault ."', id),
                                             password = IF(password IS NOT NULL, '" . $hashPassword . "', NULL)
                                         WHERE id NOT IN ( '" . implode( "', '" , $ignoreUsers ) . "' )")
                                         ->execute();
 
-            //@TODO Text
             echo 'Users affected : ' . $results . "\n";
         } catch (Exception $e) {
-            //@TODO Text
             Craft::warning("Unable to clean users: {$e->getMessage()}", __METHOD__);
         }
 

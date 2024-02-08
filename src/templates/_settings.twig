@@ -1,13 +1,11 @@
 {# @var plugin \quatrecentquatre\dummydata\DummyData #}
 {# @var settings \quatrecentquatre\dummydata\models\Settings #}
 
-{% import '_includes/forms.twig' as forms %}
-
-{# //@TODO Text #}
+{% import "_includes/forms" as forms %}
 
 {{ forms.lightswitchField({
     label: 'Users fields.'|t('dummydata'),
-    instructions: 'Whether you want to obfuscate the data of your users fields'|t('dummydata'),
+    instructions: 'Do you want to obfuscate the data of your users fields'|t('dummydata'),
     id: 'clean_users',
     name: 'clean_users',
     on: settings.clean_users,
@@ -15,7 +13,6 @@
 
 <div id="subfields" {% if settings.clean_users == false %}style="display:none;"{% endif %}>
 
-    {# //@TODO Text #}
     {{ forms.textField({
         label: 'Default password.'|t('dummydata'),
         instructions: 'Default password to inject in user table.'|t('dummydata'),
@@ -24,7 +21,6 @@
         value: settings.users_defaultPassword ?? '',
     }) }}
 
-    {# //@TODO Text #}
     {{ forms.textField({
         label: 'Default username placeholder.'|t('dummydata'),
         instructions: 'Default name to inject in user table.'|t('dummydata'),
@@ -33,7 +29,6 @@
         value: settings.users_usernameDefault ?? '',
     }) }}
 
-    {# //@TODO Text #}
     {{ forms.textField({
         label: 'Default password.'|t('dummydata'),
         instructions: 'Default to inject in user table.'|t('dummydata'),
