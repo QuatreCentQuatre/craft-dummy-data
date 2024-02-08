@@ -90,12 +90,12 @@ class DummyCustomFieldService extends Component
                 ->execute();
 
             //delete private files from db/server
-            $assets = Asset::find()->id($assetsIds)->collect();
+            $assets = Asset::find()->id($assetsIds)->all();
             foreach ($assets as $asset) {
                 Craft::$app->elements->deleteElement($asset);
             }
 
-            echo 'Assets - ' . $setting['handle'] . ' - Items affected - ' . $assets->count() . "\n";
+            echo 'Assets - ' . $setting['handle'] . ' - Items affected - ' . count($assets) . "\n";
         } catch (Exception $e) {
             Craft::warning("Unable to clean assets for field {$setting['handle']}: {$e->getMessage()}", __METHOD__);
         }
