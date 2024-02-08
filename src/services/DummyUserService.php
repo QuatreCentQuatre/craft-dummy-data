@@ -64,10 +64,8 @@ class DummyUserService extends Component
                                         WHERE id NOT IN ( '" . implode( "', '" , $ignoreUsers ) . "' )")
                                         ->execute();
 
-            //@TODO Text
             echo 'Users affected : ' . $results . "\n";
         } catch (Exception $e) {
-            //@TODO Text
             Craft::warning("Unable to clean users: {$e->getMessage()}", __METHOD__);
         }
 

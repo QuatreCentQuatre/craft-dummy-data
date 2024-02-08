@@ -27,7 +27,6 @@ class DummyAssetsService extends Component
     {
         $pluginPath = DummyData::getInstance()->getBasePath();
         
-        //@TODO Params settings plugin
         $folderName = 'dummy-files';
         $filename = 'test';
         $fileFullName = $filename . '.' . $fileExtension;
