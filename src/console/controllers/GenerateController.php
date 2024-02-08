@@ -45,6 +45,11 @@ class GenerateController extends Controller
     public $backupdb = 0;
 
     /**
+     * @var bool If interative mode is off, dont clear caches if value = 0
+     */
+    public $clearcache = 1;
+
+    /**
      * DummyData plugin settings values
      */
     public $settings;
@@ -63,6 +68,7 @@ class GenerateController extends Controller
             'force',
             'interactive',
             'backupdb',
+            'clearcache',
         ];
     }
 
@@ -88,7 +94,7 @@ class GenerateController extends Controller
         }
 
         if($this->interactive && !$this->confirm("Are you sure you want to overwrite your data?")){
-            echo 'Script ended. No changes have been made.';
+            echo "Script ended. No changes have been made.\n";
             return;
         }
 
@@ -100,6 +106,14 @@ class GenerateController extends Controller
 
         (new DummyCustomTableService)->clean();
 
+        
+        if((!$this->interactive && $this->clearcache) || 
+            ($this->interactive && $this->confirm("Do you want to clear the application cache?"))
+        ) {
+            Craft::$app->elements->invalidateAllCaches();
+            echo "Clearing all caches\n";
+        }
+
         echo 'Script ended';
     }
 
@@ -107,11 +121,11 @@ class GenerateController extends Controller
     {
         try {
             $backupPath = Craft::$app->getDb()->backup();
-            echo 'Your backup is located at : ' . $backupPath;
+            echo "Your backup is located at : " . $backupPath . "\n";
         } catch (Throwable $e) {
             Craft::error('Error backing up the database: ' . $e->getMessage(), __METHOD__);
             
-            echo "An error occurred while backing up the database";
+            echo "An error occurred while backing up the database\n";
             exit();
         }
     }
