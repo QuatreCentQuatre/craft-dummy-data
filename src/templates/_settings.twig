@@ -13,7 +13,7 @@
     on: settings.clean_users,
 }) }}
 
-<div id="subfields" style="display:none;">
+<div id="subfields" {% if settings.clean_users == false %}style="display:none;"{% endif %}>
 
     {# //@TODO Text #}
     {{ forms.textField({
