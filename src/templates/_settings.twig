@@ -1,0 +1,59 @@
+{# @var plugin \quatrecentquatre\dummydata\DummyData #}
+{# @var settings \quatrecentquatre\dummydata\models\Settings #}
+
+{% import '_includes/forms.twig' as forms %}
+
+{# //@TODO Text #}
+
+{{ forms.lightswitchField({
+    label: 'Users fields.'|t('dummydata'),
+    instructions: 'Whether you want to obfuscate the data of your users fields'|t('dummydata'),
+    id: 'clean_users',
+    name: 'clean_users',
+    on: settings.clean_users,
+}) }}
+
+<div id="subfields" style="display:none;">
+
+    {# //@TODO Text #}
+    {{ forms.textField({
+        label: 'Default password.'|t('dummydata'),
+        instructions: 'Default password to inject in user table.'|t('dummydata'),
+        id: 'users_defaultPassword',
+        name: 'users_defaultPassword',
+        value: settings.users_defaultPassword ?? '',
+    }) }}
+
+    {# //@TODO Text #}
+    {{ forms.textField({
+        label: 'Default username placeholder.'|t('dummydata'),
+        instructions: 'Default name to inject in user table.'|t('dummydata'),
+        id: 'users_usernameDefault',
+        name: 'users_usernameDefault',
+        value: settings.users_usernameDefault ?? '',
+    }) }}
+
+    {# //@TODO Text #}
+    {{ forms.textField({
+        label: 'Default password.'|t('dummydata'),
+        instructions: 'Default to inject in user table.'|t('dummydata'),
+        id: 'users_emailDomainDefault',
+        name: 'users_emailDomainDefault',
+        value: settings.users_emailDomainDefault ?? '',
+    }) }}
+</div>
+
+{% js on ready %}
+    var btn = document.querySelector('#settings-clean_users').addEventListener("click", updateValue);
+
+    function updateValue(e) {
+        var input = document.querySelector('input[name="settings[clean_users]"]');
+        var container = document.querySelector('#settings-subfields');
+
+        if(input.value) {
+            container.style.display = "block";
+        } else {
+            container.style.display = "none";
+        }
+    }
+{% endjs %}
