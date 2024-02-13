@@ -3,9 +3,12 @@
 namespace quatrecentquatre\dummydata;
 
 use Craft;
+use craft\web\View;
+use craft\events\TemplateEvent;
 use craft\base\Model;
 use craft\base\Plugin;
 use quatrecentquatre\dummydata\models\Settings;
+use yii\base\Event;
 
 /**
  * Dummy Data plugin
@@ -32,6 +35,19 @@ class DummyData extends Plugin
     {
         parent::init();
 
+        Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function(TemplateEvent $e) {
+            if (
+                $e->template === 'settings/plugins/_settings' &&
+                $e->variables['plugin'] === $this
+            ) {
+                // Add the tabs
+                $e->variables['tabs'] = [
+                    ['label' => 'Users', 'url' => '#settings-tab-users'],
+                    ['label' => 'Custom Fields', 'url' => '#settings-tab-custom-fields'],
+                ];
+            }
+        });
+
         $this->attachEventHandlers();
     }
 
@@ -45,6 +61,10 @@ class DummyData extends Plugin
         return Craft::$app->view->renderTemplate('dummy-data/_settings.twig', [
             'plugin' => $this,
             'settings' => $this->getSettings(),
+            'tabs' => [
+                ['label' => 'Users', 'url' => '#settings-tab-users'],
+                ['label' => 'Custom Fields', 'url' => '#settings-tab-custom-fields'],
+            ],
         ]);
     }
 

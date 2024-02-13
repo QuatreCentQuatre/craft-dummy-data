@@ -34,7 +34,7 @@ class DummyUserService extends Component
 
         $ignoreUsers = [];
 
-        if (count($ignoredDomains)) {
+        if (!empty($ignoredDomains)) {
             foreach ($ignoredDomains as $domain) {
                 $users = User::find()
                             ->email('*@' . $domain)
@@ -43,7 +43,7 @@ class DummyUserService extends Component
             }
         }
 
-        if (count($ignoredUsername)) {
+        if (!empty($ignoredUsername)) {
             foreach ($ignoredUsername as $username) {
                 $users = User::find()
                             ->username($username)

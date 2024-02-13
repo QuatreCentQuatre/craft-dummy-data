@@ -1,0 +1,84 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.lightswitchField({
+    label: 'Users fields.'|t('dummydata'),
+    instructions: 'Do you want to obfuscate the data of your users fields'|t('dummydata'),
+    id: 'clean_users',
+    name: 'clean_users',
+    on: settings.clean_users,
+}) }}
+
+<div id="subfields" {% if settings.clean_users == false %}style="display:none;"{% endif %}>
+
+    {{ forms.textField({
+        label: 'Default password.'|t('dummydata'),
+        instructions: 'Default password to inject in user table.'|t('dummydata'),
+        id: 'users_defaultPassword',
+        name: 'users_defaultPassword',
+        value: settings.users_defaultPassword ?? '',
+    }) }}
+
+    {{ forms.textField({
+        label: 'Default username placeholder.'|t('dummydata'),
+        instructions: 'Default name to inject in user table.'|t('dummydata'),
+        id: 'users_usernameDefault',
+        name: 'users_usernameDefault',
+        value: settings.users_usernameDefault ?? '',
+    }) }}
+
+    {{ forms.textField({
+        label: 'Default password.'|t('dummydata'),
+        instructions: 'Default to inject in user table.'|t('dummydata'),
+        id: 'users_emailDomainDefault',
+        name: 'users_emailDomainDefault',
+        value: settings.users_emailDomainDefault ?? '',
+    }) }}
+
+    {{ forms.editableTableField({
+        label: "Ignore Username"|t('app'),
+        instructions: "List of users to ignore"|t('app'),
+        id: 'users_ignoredUsername',
+        name: 'users_ignoredUsername',
+        cols: {
+            username: {
+                type: 'singleline',
+                heading: "Username"|t('app'),
+            }
+        }|filter,
+        rows: settings.users_ignoredUsername,
+        allowAdd: true,
+        allowDelete: true,
+    }) }}
+
+    {{ forms.editableTableField({
+        label: "Ignore Domains"|t('app'),
+        instructions: "List of email domains to ignore"|t('app'),
+        id: 'users_ignoredDomains',
+        name: 'users_ignoredDomains',
+        cols: {
+            domain: {
+                type: 'singleline',
+                heading: "Domains"|t('app'),
+            }
+        }|filter,
+        rows: settings.users_ignoredDomains,
+        allowAdd: true,
+        allowDelete: true,
+    }) }}
+
+</div>
+
+{% js on ready %}
+    var btn = document.querySelector('#settings-clean_users').addEventListener("click", updateValue);
+
+    function updateValue(e) {
+        var input = document.querySelector('input[name="settings[clean_users]"]');
+        var container = document.querySelector('#settings-subfields');
+
+        if(input.value) {
+            container.style.display = "block";
+        } else {
+            container.style.display = "none";
+        }
+    }
+{% endjs %}
