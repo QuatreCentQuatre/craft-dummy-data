@@ -1,0 +1,65 @@
+{% import "_includes/forms" as forms %}
+
+
+{% set typeOptions = [
+    { 'label' : 'address', 'value' : 'address' },
+    { 'label' : 'city', 'value' : 'city' },
+    { 'label' : 'date', 'value' : 'date' },
+    { 'label' : 'email', 'value' : 'email' },
+    { 'label' : 'firstName', 'value' : 'firstName' },
+    { 'label' : 'ip', 'value' : 'ip' },
+    { 'label' : 'lastName', 'value' : 'lastName' },
+    { 'label' : 'latitude', 'value' : 'latitude' },
+    { 'label' : 'longitude', 'value' : 'longitude' },
+    { 'label' : 'name', 'value' : 'name' },
+    { 'label' : 'phoneNumber', 'value' : 'phoneNumber' },
+    { 'label' : 'postcode', 'value' : 'postcode' },
+    { 'label' : 'secondaryAddress', 'value' : 'secondaryAddress' },
+    { 'label' : 'stateAbbr', 'value' : 'stateAbbr' },
+    { 'label' : 'streetName', 'value' : 'streetName' },
+    { 'label' : 'streetAddress', 'value' : 'streetAddress' },
+    { 'label' : 'text', 'value' : 'text' },
+    { 'label' : 'userName', 'value' : 'userName' },
+    { 'label' : 'url', 'value' : 'url' },
+    { 'label' : 'userAgent', 'value' : 'userAgent' },
+    
+    { 'label' : 'compressed', 'value' : 'compressed' },
+    { 'label' : 'excel', 'value' : 'excel' },
+    { 'label' : 'image', 'value' : 'image' },
+    { 'label' : 'pdf', 'value' : 'pdf' },
+    { 'label' : 'txt', 'value' : 'txt' },
+    { 'label' : 'word', 'value' : 'word' },
+    { 'label' : 'custom', 'value' : 'custom' }
+]
+%}
+
+{{ forms.editableTableField({
+    label: "Custom Fields"|t('app'),
+    instructions: "List of CraftCms fields to anonymize. Fill Custom value column if the field type is custom"|t('app'),
+    id: 'custom_fields',
+    name: 'custom_fields',
+    cols: {
+        handle: {
+            type: 'singleline',
+            heading: "Field Handle"|t('app'),
+        },
+        type: {
+            type: 'select',
+            heading: "Type"|t('app'),
+            options : typeOptions,
+            class : 'type-column',
+        },
+        value: {
+            type: 'singleline',
+            heading: "Custom value"|t('app'),
+            class : 'custom-value-column',
+        },
+    }|filter,
+    rows: settings.custom_fields,
+    allowAdd: true,
+    allowDelete: true,
+}) }}
+
+{% css %}
+    /* .custom-value-column.text-cell { display:none; } */
+{% endcss %}

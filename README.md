@@ -38,11 +38,15 @@ Create a file to configure your project : config/dummy-data.php
 
 return [
     'clean_users' => 1,
-    'users_defaultPassword' => 'dummydata',
-    'users_ignoredUsername' => ['admin'],
-    'users_ignoredDomains' => [],
+    'users_defaultPassword' => '4cent4',
+    'users_ignoredUsername' => [
+                                ['username' => 'admin'],
+                            ],
+    'users_ignoredDomains' => [
+                                ['domain' => 'test.ca']
+                            ],
     'users_usernameDefault' => 'dummy-data',
-    'users_emailDomainDefault' => 'dummydata.dummy',
+    'users_emailDomainDefault' => 'test.ca',
     'custom_fields' => [
         ['type' => 'text', 'handle' => 'craft_field_handle'],
     ],
@@ -61,15 +65,17 @@ return [
 
 In the plugin configuration, you can activate the option to anonymize the user data. You can choose a defaut password, username and domain name to generate the content.
 
-In the configuration file, you can also list an array of username or domain to ignore.
+You can also list an array of username or domain to ignore.
 
 ### Custom Fields
 
-Create an array of the fields that needed to be anonymize with the type of content that the data should be replace with.
+In the plugin configuration, add rows to the table with the fields that needed to be anonymize with the type of content that the data should be replace with.
 
 The script will replace all the rows in the database that have data in it. 
 
 The handle key is the handle of your field in your Craft control panel. (The script will get the field prefix/suffix if needed from the database.)
+
+If you choose the type : "custom", you could write a custom value for this specific field.
 
 ### Custom Tables
 
@@ -132,8 +138,8 @@ php craft dummy-data/generate
 
 ### Roadmap
 
-- svg logo 4c4
 - Add action in CMS to launch script
+- Edit custom table in Control Panel
 - Add complex mode. Modify each entries individually with different data with queue system
 
 Develop by [QuatreCentQuatre](https://www.quatrecentquatre.com)
