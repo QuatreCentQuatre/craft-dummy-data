@@ -12,8 +12,8 @@ class Settings extends Model
 {
     public $clean_users = false;
     public $users_defaultPassword = 'dummydata';
-    public $users_ignoredUsername = [];
-    public $users_ignoredDomains = [];
+    public array $users_ignoredUsername = [];
+    public array $users_ignoredDomains = [];
     public $users_usernameDefault = 'dummydata';
     public $users_emailDomainDefault = 'dummydata.dummy';
     public $custom_fields = [];

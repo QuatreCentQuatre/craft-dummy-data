@@ -36,7 +36,44 @@
         name: 'users_emailDomainDefault',
         value: settings.users_emailDomainDefault ?? '',
     }) }}
+
+    {{ forms.editableTableField({
+        label: "Ignore Username"|t('app'),
+        instructions: "List of users to ignore"|t('app'),
+        id: 'users_ignoredUsername',
+        name: 'users_ignoredUsername',
+        cols: {
+            username: {
+                type: 'text',
+                heading: "Username"|t('app'),
+            }
+        }|filter,
+        rows: settings.users_ignoredUsername,
+        allowAdd: true,
+        allowDelete: true,
+    }) }}
+
+    {{ forms.editableTableField({
+        label: "Ignore Domains"|t('app'),
+        instructions: "List of email domains to ignore"|t('app'),
+        id: 'users_ignoredDomains',
+        name: 'users_ignoredDomains',
+        cols: {
+            domain: {
+                type: 'text',
+                heading: "Domains"|t('app'),
+            }
+        }|filter,
+        rows: settings.users_ignoredDomains,
+        allowAdd: true,
+        allowDelete: true,
+    }) }}
+
 </div>
+
+{% css %}
+    .editable-table-preview { display:none!important; }
+{% endcss %}
 
 {% js on ready %}
     var btn = document.querySelector('#settings-clean_users').addEventListener("click", updateValue);
