@@ -75,9 +75,10 @@ class DummyCustomFieldService extends Component
         $assetsIds = Yii::$app->db->createCommand(
                                                     "SELECT DISTINCT(targetId) 
                                                     FROM relations 
-                                                    WHERE fieldId =:fieldId"
+                                                    WHERE fieldId =:fieldId AND targetId <> :dummyFileId"
                                                 )
                                     ->bindValue(':fieldId', $field->id)
+                                    ->bindValue(':dummyFileId', $setting['value']->id)
                                     ->queryColumn();
 
         try {

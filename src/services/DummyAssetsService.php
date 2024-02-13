@@ -61,11 +61,12 @@ class DummyAssetsService extends Component
 
             if (!$asset) {
                 //create tmp file to upload (Deleted by default after upload)
-                copy($dummyFilesPath . $fileFullName, $dummyFilesPath . 'tmp.' . $fileExtension);
+                $tmpFile = Craft::$app->getPath()->getTempAssetUploadsPath() . '/tmp.' . $fileExtension;
+                copy($dummyFilesPath . $fileFullName, $tmpFile);
                 
                 // Check the permissions to upload in the resolved folder.
                 $asset = new Asset();
-                $asset->tempFilePath =  $dummyFilesPath . 'tmp.' . $fileExtension;
+                $asset->tempFilePath =  $tmpFile;
                 $asset->filename = $fileFullName;
                 $asset->newFolderId = $folderDummyData->id;
                 $asset->volumeId = $folderDummyData->volumeId;
@@ -73,6 +74,7 @@ class DummyAssetsService extends Component
                 $asset->setScenario(Asset::SCENARIO_CREATE);
 
                 Craft::$app->getElements()->saveElement($asset);
+
             }
 
             return $asset;
