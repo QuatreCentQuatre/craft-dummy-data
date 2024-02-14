@@ -4,10 +4,10 @@ namespace quatrecentquatre\dummydata\services;
 
 use Craft;
 use Yii;
-use Faker;
+use Exception;
 use craft\base\Component;
 use craft\elements\Asset;
-use Exception;
+use craft\helpers\ElementHelper;
 use quatrecentquatre\dummydata\DummyData;
 use quatrecentquatre\dummydata\helpers\DummyDataHelpers;
 
@@ -47,6 +47,8 @@ class DummyCustomFieldService extends Component
                 }
             }
         }
+
+        $this->updateTitleField();
     }
 
     private function updateCustomField($field, $setting) 
@@ -102,4 +104,58 @@ class DummyCustomFieldService extends Component
         }
         
     }
+
+    private function updateTitleField()
+    {
+        $fieldsSettings = collect($this->settings->section_title ?? []);
+        if (!$fieldsSettings->count()) {
+            return;
+        }
+
+        foreach ($fieldsSettings as $field) {
+            $value = (new DummyDataHelpers)->getFieldDataByType($field['type'], ($field['value'] ?? ''));
+
+            $contentIds = Yii::$app->db->createCommand(
+                                                    "SELECT distinct(elements.id)
+                                                    FROM sections 
+                                                    INNER JOIN entries ON entries.sectionId = sections.id
+                                                    INNER JOIN elements ON elements.id = entries.id
+                                                    INNER JOIN content ON content.elementId = elements.id
+                                                    WHERE handle = :sectionHandle"
+                                                )
+                                    ->bindValue(':sectionHandle', $field['handle'])
+                                    ->queryColumn();
+            
+            try {
+                if(!$contentIds) {
+                    return;
+                }
+
+                //Replace title content for section
+                $results = Yii::$app->db->createCommand("UPDATE content
+                                                            SET title = :title
+                                                            WHERE elementId IN ( '" . implode( "', '" , $contentIds ) . "' )")
+                    ->bindValue(':title', $value)
+                    ->execute();
+    
+                echo 'Section titles - ' . $field['handle'] . ' - Items affected - ' . $results . "\n";
+
+                if ($field['slug']) {
+                    //Replace slug for section
+                    $slug = ElementHelper::generateSlug($value);
+                    $results = Yii::$app->db->createCommand("UPDATE elements_sites
+                                                                SET slug = CONCAT('" . $slug ."-', id)
+                                                                WHERE elementId IN ( '" . implode( "', '" , $contentIds ) . "' )")
+                        ->execute();
+        
+                    echo 'Section slug - ' . $field['handle'] . ' - Items affected - ' . $results . "\n";
+                }
+
+
+            } catch (Exception $e) {
+                Craft::warning("Unable to clean title and/or slug for section {$field['handle']}: {$e->getMessage()}", __METHOD__);
+            }
+        }
+    }
+
 }
