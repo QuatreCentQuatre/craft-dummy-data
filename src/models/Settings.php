@@ -17,6 +17,7 @@ class Settings extends Model
     public $users_usernameDefault = 'dummydata';
     public $users_emailDomainDefault = 'dummydata.dummy';
     public $custom_fields = [];
+    public $section_title = [];
     public $custom_tables = [];
 
     public function defineRules(): array

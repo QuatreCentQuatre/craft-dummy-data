@@ -50,8 +50,6 @@ class DummyData extends Plugin
 
         // Defer most setup tasks until Craft is fully initialized
         Craft::$app->onInit(function() {
-            
-
             $this->attachEventHandlers();
         });
 

@@ -33,6 +33,22 @@
 ]
 %}
 
+{% set textOptions = [
+    { 'label' : 'address', 'value' : 'address' },
+    { 'label' : 'city', 'value' : 'city' },
+    { 'label' : 'date', 'value' : 'date' },
+    { 'label' : 'email', 'value' : 'email' },
+    { 'label' : 'name', 'value' : 'name' },
+    { 'label' : 'stateAbbr', 'value' : 'stateAbbr' },
+    { 'label' : 'streetAddress', 'value' : 'streetAddress' },
+    { 'label' : 'text', 'value' : 'text' },
+    { 'label' : 'userName', 'value' : 'userName' },
+    { 'label' : 'custom', 'value' : 'custom' }
+]
+%}
+
+
+
 {{ forms.editableTableField({
     label: "Custom Fields"|t('app'),
     instructions: "List of CraftCms fields to anonymize. Fill Custom value column if the field type is custom"|t('app'),
@@ -56,6 +72,33 @@
         },
     }|filter,
     rows: settings.custom_fields,
+    allowAdd: true,
+    allowDelete: true,
+}) }}
+
+{{ forms.editableTableField({
+    label: "Section Title"|t('app'),
+    instructions: "List of CraftCms sections title to anonymize. Fill Custom value column if the field type is custom"|t('app'),
+    id: 'section_title',
+    name: 'section_title',
+    cols: {
+        handle: {
+            type: 'singleline',
+            heading: "Section Handle"|t('app'),
+        },
+        type: {
+            type: 'select',
+            heading: "Type"|t('app'),
+            options : textOptions,
+            class : 'type-column',
+        },
+        value: {
+            type: 'singleline',
+            heading: "Custom value"|t('app'),
+            class : 'custom-value-column',
+        },
+    }|filter,
+    rows: settings.section_title,
     allowAdd: true,
     allowDelete: true,
 }) }}
