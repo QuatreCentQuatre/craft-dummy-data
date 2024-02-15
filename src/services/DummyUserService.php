@@ -37,7 +37,7 @@ class DummyUserService extends Component
         if (!empty($ignoredDomains)) {
             foreach ($ignoredDomains as $domain) {
                 $users = User::find()
-                            ->email('*@' . $domain)
+                            ->email('*@' . $domain['domain'])
                             ->ids();
                 $ignoreUsers = array_merge($ignoreUsers, $users);
             }
@@ -46,7 +46,7 @@ class DummyUserService extends Component
         if (!empty($ignoredUsername)) {
             foreach ($ignoredUsername as $username) {
                 $users = User::find()
-                            ->username($username)
+                            ->username($username['username'])
                             ->ids();
                 $ignoreUsers = array_merge($ignoreUsers, $users);
             }
