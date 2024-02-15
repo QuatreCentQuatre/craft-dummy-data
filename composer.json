@@ -9,7 +9,7 @@
     "require": {
         "php": ">=7.3",
         "craftcms/cms": "^3.5.0",
-        "fakerphp/faker": "^1.23.1",
+        "fakerphp/faker": "1.20.0",
         "illuminate/collections" : "^8.0"
     },
     "require-dev": {
