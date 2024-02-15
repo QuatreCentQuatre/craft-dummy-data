@@ -29,11 +29,6 @@ class GenerateController extends Controller
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var bool Force the script even in production mode
-     */
-    public $force = 0 ;
-
      /**
      * @var bool Run the script without prompt
      */
@@ -65,7 +60,6 @@ class GenerateController extends Controller
     public function options($actionID): array
     {
         return [
-            'force',
             'interactive',
             'backupdb',
             'clearcache',
@@ -80,8 +74,8 @@ class GenerateController extends Controller
     {
         $environment = Craft::$app->getConfig()->env;
 
-        if (!$this->force && $environment === 'production') {
-            echo "Can't run this script in production. Try running the command with the option --force";
+        if ($environment === 'production') {
+            echo "Can't run this script in production.";
             return;
         }
 
