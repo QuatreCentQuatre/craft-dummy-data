@@ -16,7 +16,7 @@ class DummyCustomFieldService extends Component
 
     public $settings;
 
-    public array $assetsType = ['word', 'txt', 'pdf', 'image', 'excel', 'compressed'];
+    public $assetsType = ['word', 'txt', 'pdf', 'image', 'excel', 'compressed'];
     
     /**
      * @inheritdoc

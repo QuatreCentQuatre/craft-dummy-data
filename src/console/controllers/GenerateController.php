@@ -1,6 +1,6 @@
 <?php
 /**
- * Dummy Data plugin for Craft CMS 4.x
+ * Dummy Data plugin for Craft CMS 3.x
  *
  * @link      https://quatrecentquatre.com/
  * @copyright Copyright (c) 2024 QuatreCentQuatre
@@ -22,7 +22,7 @@ use quatrecentquatre\dummydata\services\DummyCustomTableService;
  *
  * @author    QuatreCentQuatre
  * @package   DummyData
- * @since     1.0.0
+ * @since     3.0.0
  */
 class GenerateController extends Controller
 {
@@ -108,7 +108,7 @@ class GenerateController extends Controller
             echo "Clearing all caches\n";
         }
 
-        echo 'Script ended';
+        echo "Script ended\n";
     }
 
     private function backupDb()
