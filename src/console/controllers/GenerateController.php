@@ -22,7 +22,7 @@ use quatrecentquatre\dummydata\services\DummyCustomTableService;
  *
  * @author    QuatreCentQuatre
  * @package   DummyData
- * @since     1.0.0
+ * @since     4.0.0
  */
 class GenerateController extends Controller
 {
@@ -107,7 +107,7 @@ class GenerateController extends Controller
             echo "Clearing all caches\n";
         }
 
-        echo 'Script ended';
+        echo "Script ended\n";
     }
 
     private function backupDb()
