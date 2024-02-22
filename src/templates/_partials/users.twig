@@ -7,8 +7,8 @@
     name: 'clean_users',
     on: settings.clean_users,
 }) }}
-
-<div id="subfields" {% if settings.clean_users == false %}style="display:none;"{% endif %}>
+{#{% if settings.clean_users == false %}style="display:none;"{% endif %}#}
+<div id="subfields">
 
     {{ forms.textField({
         label: 'Default password.'|t('dummydata'),
@@ -27,8 +27,8 @@
     }) }}
 
     {{ forms.textField({
-        label: 'Default email domain.'|t('dummydata'),
-        instructions: 'Default domain use to create user email.'|t('dummydata'),
+        label: 'Default password.'|t('dummydata'),
+        instructions: 'Default to inject in user table.'|t('dummydata'),
         id: 'users_emailDomainDefault',
         name: 'users_emailDomainDefault',
         value: settings.users_emailDomainDefault ?? '',
@@ -68,17 +68,27 @@
 
 </div>
 
-{% js on ready %}
-    var btn = document.querySelector('#settings-clean_users').addEventListener("click", updateValue);
+{% css %}
+    #settings-subfields {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+    }
+{% endcss %}
 
-    function updateValue(e) {
+{% js on ready %}
+    var btn = document.querySelector('#settings-clean_users');
+    btn.addEventListener("click", updateValue);
+
+    function updateValue() {
         var input = document.querySelector('input[name="settings[clean_users]"]');
         var container = document.querySelector('#settings-subfields');
 
-        if(input.value) {
-            container.style.display = "block";
+        if (input.value) {
+            container.style.maxHeight = container.scrollHeight + "px";
         } else {
-            container.style.display = "none";
+            container.style.maxHeight = null;
         }
     }
+    updateValue();
 {% endjs %}

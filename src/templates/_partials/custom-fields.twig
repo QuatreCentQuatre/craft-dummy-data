@@ -22,7 +22,7 @@
     { 'label' : 'userName', 'value' : 'userName' },
     { 'label' : 'url', 'value' : 'url' },
     { 'label' : 'userAgent', 'value' : 'userAgent' },
-    
+
     { 'label' : 'compressed', 'value' : 'compressed' },
     { 'label' : 'excel', 'value' : 'excel' },
     { 'label' : 'image', 'value' : 'image' },
@@ -46,6 +46,8 @@
     { 'label' : 'custom', 'value' : 'custom' }
 ]
 %}
+
+
 
 {{ forms.editableTableField({
     label: "Custom Fields"|t('app'),
@@ -106,5 +108,63 @@
 }) }}
 
 {% css %}
-    /* .custom-value-column.text-cell { display:none; } */
+    td {
+        background-color: transparent;
+        transition: background-color 200ms ease-in-out;
+    }
+
+    td:has(textarea[disabled]), td:has(textarea:disabled) {
+        background-color: rgb(228, 237, 246) !important;
+    }
 {% endcss %}
+
+{% js on ready %}
+    var addBtns = document.querySelectorAll('#settings-tab-custom-fields .btn.add');
+    addBtns.forEach(function(addBtn){
+        addBtn.addEventListener('click', handleNewRow);
+    });
+
+    function disableAllTextarea() {
+        var textareas = document.querySelectorAll('.custom-value-column textarea');
+        textareas.forEach(function(textarea){
+            if(textarea.parentElement.parentElement.querySelector('.type-column select').value !== 'custom'){
+                textarea.disabled = "disabled";
+
+            }
+        });
+    }
+    disableAllTextarea();
+
+    function addEventSelects() {
+        var selects = document.querySelectorAll('.type-column select');
+        selects.forEach(function(select){
+            select.addEventListener('change', handleCustomValue);
+        });
+    }
+    addEventSelects();
+
+    function removeEventSelects() {
+        var selects = document.querySelectorAll('.type-column select');
+        selects.forEach(function(select){
+            select.removeEventListener('change', handleCustomValue);
+        });
+    }
+
+    function handleCustomValue(e) {
+        if(e.currentTarget.value === 'custom') {
+            e.currentTarget.parentElement.parentElement.parentElement.querySelector('.custom-value-column textarea').removeAttribute("disabled");
+        } else {
+            e.currentTarget.parentElement.parentElement.parentElement.querySelector('.custom-value-column textarea').disabled = "disabled";
+            e.currentTarget.parentElement.parentElement.parentElement.querySelector('.custom-value-column textarea').value = '';
+        }
+    }
+
+    function handleNewRow(e) {
+        setTimeout(function () {
+            disableAllTextarea();
+            removeEventSelects();
+            addEventSelects();
+        }, 0);
+        
+    }
+{% endjs %}
