@@ -108,7 +108,7 @@ class DummyDataHelpers extends Component
         ];
         foreach (Craft::$app->getFields()->getAllFields() as $field) {
             $fields[] = [
-                'label' => $field['name'],
+                'label' => $field['name'] . ' (' . $field['handle'] . ')',
                 'value' => $field['handle'],
             ];
         }
@@ -123,7 +123,7 @@ class DummyDataHelpers extends Component
         
         foreach (Craft::$app->getSections()->getAllSections() as $field) {
             $fields[] = [
-                'label' => $field['name'],
+                'label' => $field['name'] . ' (' . $field['handle'] . ')',
                 'value' => $field['handle'],
             ];
         }
