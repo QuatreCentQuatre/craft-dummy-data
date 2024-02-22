@@ -8,6 +8,7 @@ use craft\events\TemplateEvent;
 use craft\base\Model;
 use craft\base\Plugin;
 use quatrecentquatre\dummydata\models\Settings;
+use quatrecentquatre\dummydata\helpers\DummyDataHelpers;
 use yii\base\Event;
 
 /**
@@ -65,6 +66,8 @@ class DummyData extends Plugin
                 ['label' => 'Users', 'url' => '#settings-tab-users'],
                 ['label' => 'Custom Fields', 'url' => '#settings-tab-custom-fields'],
             ],
+            'fields_list' => (new DummyDataHelpers)->getAllFieldsCraft(),
+            'sections_list' => (new DummyDataHelpers)->getAllSectionsCraft(),
         ]);
     }
 

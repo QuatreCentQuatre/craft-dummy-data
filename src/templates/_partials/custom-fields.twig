@@ -28,6 +28,7 @@
     { 'label' : 'image', 'value' : 'image' },
     { 'label' : 'pdf', 'value' : 'pdf' },
     { 'label' : 'txt', 'value' : 'txt' },
+    { 'label' : 'video', 'value' : 'video' },
     { 'label' : 'word', 'value' : 'word' },
     { 'label' : 'custom', 'value' : 'custom' }
 ]
@@ -56,8 +57,9 @@
     name: 'custom_fields',
     cols: {
         handle: {
-            type: 'singleline',
+            type: 'select',
             heading: "Field Handle"|t('app'),
+            options : fields_list, 
         },
         type: {
             type: 'select',
@@ -83,8 +85,13 @@
     name: 'section_title',
     cols: {
         handle: {
-            type: 'singleline',
+            type: 'select',
             heading: "Section Handle"|t('app'),
+            options : sections_list,
+        },
+        slug: {
+            type: 'checkbox',
+            heading: "Also replace slug"|t('app'),
         },
         type: {
             type: 'select',
@@ -96,10 +103,6 @@
             type: 'singleline',
             heading: "Custom value"|t('app'),
             class : 'custom-value-column',
-        },
-        slug: {
-            type: 'checkbox',
-            heading: "Also replace slug"|t('app'),
         },
     }|filter,
     rows: settings.section_title,

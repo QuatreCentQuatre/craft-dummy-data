@@ -116,6 +116,7 @@ For more informations about what kind of data each type return, you can look up 
 - image (.jpg)
 - pdf (.pdf)
 - txt (.txt)
+- video (.mp4)
 - word (.docx)
 
 #### Custom value
