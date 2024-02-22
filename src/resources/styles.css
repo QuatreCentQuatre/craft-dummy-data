@@ -1,0 +1,14 @@
+td {
+    background-color: transparent;
+    transition: background-color 200ms ease-in-out;
+}
+
+td:has(textarea[disabled]), td:has(textarea:disabled) {
+    background-color: rgb(228, 237, 246) !important;
+}
+
+#settings-subfields {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
