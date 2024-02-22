@@ -1,5 +1,6 @@
 {# @var plugin \quatrecentquatre\dummydata\DummyData #}
 {# @var settings \quatrecentquatre\dummydata\models\Settings #}
+{% do view.registerAssetBundle("quatrecentquatre\\dummydata\\assets\\AssetsBundle") %}
 
 <div id="tab-users">
     {% include 'dummy-data/_partials/users.twig' %}
