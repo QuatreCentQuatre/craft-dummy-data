@@ -3,6 +3,7 @@
 namespace quatrecentquatre\dummydata\helpers;
 
 use Faker;
+use Craft;
 use craft\base\Component;
 use quatrecentquatre\dummydata\services\DummyAssetsService;
 
@@ -42,11 +43,44 @@ class DummyDataHelpers extends Component
             'pdf' => $assetsService->getAsset('pdf'),
             'excel' => $assetsService->getAsset('xlsx'),
             'compressed' => $assetsService->getAsset('zip'),
+            'video' => $assetsService->getAsset('mp4'),
 
             default => $default ?? '',
         };
 
         return $return_value;
+    }
+
+    public function getAllFieldsCraft()
+    {
+        $fields = [
+            ['label' => 'Select a field', 'value' => '']
+        ];
+
+        foreach (Craft::$app->getFields()->getAllFields() as $field) {
+            $fields[] = [
+                'label' => $field['name'],
+                'value' => $field['handle'],
+            ];
+        }
+
+        return $fields;
+    }
+
+    public function getAllSectionsCraft()
+    {
+        $fields = [
+            ['label' => 'Select a section', 'value' => '']
+        ];
+        
+        foreach ( Craft::$app->getSections()->getAllSections() as $field) {
+            $fields[] = [
+                'label' => $field['name'],
+                'value' => $field['handle'],
+            ];
+        }
+
+        return $fields;
     }
 
 }

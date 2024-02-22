@@ -9,6 +9,7 @@ use craft\events\TemplateEvent;
 use craft\base\Model;
 use craft\base\Plugin;
 use quatrecentquatre\dummydata\models\Settings;
+use quatrecentquatre\dummydata\helpers\DummyDataHelpers;
 
 /**
  * Dummy Data plugin
@@ -45,6 +46,7 @@ class DummyData extends Plugin
                     ['label' => 'Users', 'url' => '#settings-tab-users'],
                     ['label' => 'Custom Fields', 'url' => '#settings-tab-custom-fields'],
                 ];
+
             }
         });
 
@@ -65,6 +67,8 @@ class DummyData extends Plugin
     {
         return Craft::$app->view->renderTemplate('dummy-data/_settings.twig', [
             'plugin' => $this,
+            'fields_list' => (new DummyDataHelpers)->getAllFieldsCraft(),
+            'sections_list' => (new DummyDataHelpers)->getAllSectionsCraft(),
             'settings' => $this->getSettings(),
         ]);
     }
