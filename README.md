@@ -5,8 +5,8 @@ Dummy Data is a CraftCms plugin used to anonymize sensible data in the CraftCms 
 ## Requirements
 
 This plugin requires : 
-- Craft CMS 4.5.0 or later.
-- PHP 8.0.2 or later.
+- Craft CMS 5.0.0 or later.
+- PHP 8.2 or later.
 - Mysql database
 
 ## Installation
