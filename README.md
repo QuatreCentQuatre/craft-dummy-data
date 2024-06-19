@@ -5,7 +5,7 @@ Dummy Data is a CraftCms plugin used to anonymize sensible data in the CraftCms 
 ## Requirements
 
 This plugin requires : 
-- Craft CMS 3.5.0 or later. (Not compatible for Craft 5 yet.)
+- Craft CMS 4.5.0 or later.
 - PHP 8.0.2 or later.
 - Mysql database
 
@@ -31,35 +31,6 @@ composer require quatrecentquatre/craft-dummy-data
 
 ## How it works
 
-Create a file to configure your project : config/dummy-data.php
-
-```
-<?php 
-
-return [
-    'clean_users' => 1,
-    'users_defaultPassword' => '4cent4',
-    'users_ignoredUsername' => [
-                                ['username' => 'admin'],
-                            ],
-    'users_ignoredDomains' => [
-                                ['domain' => 'test.ca']
-                            ],
-    'users_usernameDefault' => 'dummy-data',
-    'users_emailDomainDefault' => 'test.ca',
-    'custom_fields' => [
-        ['type' => 'text', 'handle' => 'craft_field_handle'],
-    ],
-    'custom_tables' => [
-        [
-            'name' => 'newsletter_users',
-            'custom_fields' => [
-                ['type' => 'email', 'handle' => 'email'],
-            ],
-        ]
-    ]
-];
-```
 
 ### User
 
@@ -118,6 +89,40 @@ For more informations about what kind of data each type return, you can look up 
 - txt (.txt)
 - video (.mp4)
 - word (.docx)
+
+#### Config file
+
+It is possible to use a configuration file to overwrite the CMS settings
+
+Create a file to configure your project : config/dummy-data.php
+
+```
+<?php 
+
+return [
+    'clean_users' => 1,
+    'users_defaultPassword' => '4cent4',
+    'users_ignoredUsername' => [
+                                ['username' => 'admin'],
+                            ],
+    'users_ignoredDomains' => [
+                                ['domain' => 'test.ca']
+                            ],
+    'users_usernameDefault' => 'dummy-data',
+    'users_emailDomainDefault' => 'test.ca',
+    'custom_fields' => [
+        ['type' => 'text', 'handle' => 'craft_field_handle'],
+    ],
+    'custom_tables' => [
+        [
+            'name' => 'newsletter_users',
+            'custom_fields' => [
+                ['type' => 'email', 'handle' => 'email'],
+            ],
+        ]
+    ]
+];
+```
 
 #### Custom value
 
