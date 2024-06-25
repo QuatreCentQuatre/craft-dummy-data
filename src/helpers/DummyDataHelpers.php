@@ -10,6 +10,10 @@ use quatrecentquatre\dummydata\services\DummyAssetsService;
 class DummyDataHelpers extends Component
 {
 
+    /*
+    * Return value of a specific field type
+    */
+
     public function getFieldDataByType($type, $default = null)
     {
         $faker = Faker\Factory::create();
@@ -73,7 +77,7 @@ class DummyDataHelpers extends Component
             ['label' => 'Select a section', 'value' => '']
         ];
         
-        foreach ( Craft::$app->getSections()->getAllSections() as $field) {
+        foreach ( Craft::$app->getEntries()->getAllSections() as $field) {
             $fields[] = [
                 'label' => $field['name'] . ' (' . $field['handle'] . ')',
                 'value' => $field['handle'],
