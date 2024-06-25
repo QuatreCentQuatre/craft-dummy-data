@@ -5,41 +5,32 @@ namespace quatrecentquatre\dummydata\services;
 use Craft;
 use Yii;
 use Exception;
-use craft\base\Component;
 use craft\elements\Asset;
+use craft\helpers\Console;
 use craft\helpers\ElementHelper;
-use quatrecentquatre\dummydata\DummyData;
+use quatrecentquatre\dummydata\services\DummyService;
 use quatrecentquatre\dummydata\helpers\DummyDataHelpers;
+use yii\base\InvalidConfigException;
 
-class DummyCustomFieldService extends Component
+class DummyCustomFieldService extends DummyService
 {
 
-    public $settings;
-
     public $assetsType = ['word', 'txt', 'pdf', 'image', 'excel', 'compressed', 'video'];
-    
-    /**
-     * @inheritdoc
-     */
-    public function init() :void
-    {
-        parent::init();
-
-        $this->settings = DummyData::getInstance()->getSettings();
-    }
 
     public function clean() 
-    {  
+    {
         $fieldsSettings = collect($this->settings->custom_fields ?? []);
         if (!$fieldsSettings->count()) {
             return;
         }
 
+        //Get all custom fields in CraftCMS
         $fields = Craft::$app->getFields()->getAllFields();
 
         foreach ($fields as $field) {
             if ($setting = $fieldsSettings->where('handle', $field['handle'])->first()) {
                 $setting['value'] = (new DummyDataHelpers)->getFieldDataByType($setting['type'], ($setting['value'] ?? ''));
+                //Check if the fields is an assets type or a text type.
                 if (in_array($setting['type'], $this->assetsType)) {
                     $this->updateAssetField($field, $setting);
                 } else {
@@ -53,6 +44,7 @@ class DummyCustomFieldService extends Component
 
     private function updateCustomField($field, $setting) 
     {
+        //Get field prefix to append to field handle
         $fieldName = (!empty($field['columnPrefix'])) ? $field['columnPrefix'] . '_' : 'field_';
         $fieldName .= $field['handle'];
         $fieldName .= (!empty($field['columnSuffix'])) ? '_' . $field['columnSuffix'] : '';
@@ -66,7 +58,7 @@ class DummyCustomFieldService extends Component
                                     ->bindValue(':fieldName', $setting['value'])
                                     ->execute();
 
-            echo 'Custom field - ' . $fieldName . ' - Items affected : ' . $results . "\n";
+            Console::stdout("Custom field - " . $fieldName . " - Items affected : " . $results . "\n");
         } catch (Exception $e) {
             Craft::warning("Unable to clean field {$setting['handle']}: {$e->getMessage()}", __METHOD__);
         }
@@ -74,6 +66,7 @@ class DummyCustomFieldService extends Component
 
     private function updateAssetField($field, $setting) 
     {
+        //get all assets ids for a specific field ID
         $assetsIds = Yii::$app->db->createCommand(
                                                     "SELECT DISTINCT(targetId) 
                                                     FROM relations 
@@ -85,7 +78,7 @@ class DummyCustomFieldService extends Component
 
         try {
             //Replace all relation to dummy file
-            $resultsRelations = Yii::$app->db->createCommand("UPDATE relations
+            Yii::$app->db->createCommand("UPDATE relations
                                     SET targetId =:fileId
                                     WHERE fieldId =:fieldId")
                 ->bindValue(':fileId', $setting['value']->id)
@@ -98,7 +91,7 @@ class DummyCustomFieldService extends Component
                 Craft::$app->elements->deleteElement($asset);
             }
 
-            echo 'Assets - ' . $setting['handle'] . ' - Items affected - ' . count($assets) . "\n";
+            Console::stdout("Assets - " . $setting['handle'] . " - Items affected - " . count($assets) . "\n");
         } catch (Exception $e) {
             Craft::warning("Unable to clean assets for field {$setting['handle']}: {$e->getMessage()}", __METHOD__);
         }
@@ -107,13 +100,21 @@ class DummyCustomFieldService extends Component
 
     private function updateTitleField()
     {
-        $fieldsSettings = collect($this->settings->section_title ?? []);
-        if (!$fieldsSettings->count()) {
+        $sectionsSettings = collect($this->settings->section_title ?? []);
+        if (!count($sectionsSettings)) {
             return;
         }
 
-        foreach ($fieldsSettings as $field) {
-            $value = (new DummyDataHelpers)->getFieldDataByType($field['type'], ($field['value'] ?? ''));
+        foreach ($sectionsSettings as $section) {
+
+            if(!$section) { continue; }
+
+            $sectionCraft = Craft::$app->getSections()->getSectionByHandle($section['handle']);
+            if (!$sectionCraft) {
+                throw new InvalidConfigException("Invalid section handle:". $section['handle']);
+            }
+
+            $value = (new DummyDataHelpers)->getFieldDataByType($section['type'], ($section['value'] ?? ''));
 
             $contentIds = Yii::$app->db->createCommand(
                                                     "SELECT distinct(elements.id)
@@ -123,7 +124,7 @@ class DummyCustomFieldService extends Component
                                                     INNER JOIN content ON content.elementId = elements.id
                                                     WHERE handle = :sectionHandle"
                                                 )
-                                    ->bindValue(':sectionHandle', $field['handle'])
+                                    ->bindValue(':sectionHandle', $section['handle'])
                                     ->queryColumn();
             
             try {
@@ -138,22 +139,30 @@ class DummyCustomFieldService extends Component
                     ->bindValue(':title', $value)
                     ->execute();
     
-                echo 'Section titles - ' . $field['handle'] . ' - Items affected - ' . $results . "\n";
+                Console::stdout("Section titles - " . $section['handle'] . " - Items affected - " . $results . "\n");
 
-                if ($field['slug']) {
-                    //Replace slug for section
+                //Replace slug and uri for section
+                if ($section['slug']) {
+                    
                     $slug = ElementHelper::generateSlug($value);
-                    $results = Yii::$app->db->createCommand("UPDATE elements_sites
-                                                                SET slug = CONCAT('" . $slug ."-', id)
+
+                    //loop all sites to rewrite the slug in uri
+                    foreach($sectionCraft->getSiteSettings() as $site) {
+                        $uri = str_replace('{slug}', $slug, $site->uriFormat);
+
+                        $results = Yii::$app->db->createCommand("UPDATE elements_sites
+                                                                SET slug = CONCAT('" . $slug ."-', id),
+                                                                    uri = CONCAT('" . $uri ."-', id)
                                                                 WHERE elementId IN ( '" . implode( "', '" , $contentIds ) . "' )")
-                        ->execute();
+                                                ->execute();
         
-                    echo 'Section slug - ' . $field['handle'] . ' - Items affected - ' . $results . "\n";
+                        Console::stdout("Section slug - " . $section['handle'] . " - Site Id : " . $site->id . " - Items affected - " . $results . "\n");
+                    }
                 }
 
 
             } catch (Exception $e) {
-                Craft::warning("Unable to clean title and/or slug for section {$field['handle']}: {$e->getMessage()}", __METHOD__);
+                Craft::warning("Unable to clean title and/or slug for section {$section['handle']}: {$e->getMessage()}", __METHOD__);
             }
         }
     }

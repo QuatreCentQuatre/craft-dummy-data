@@ -4,25 +4,13 @@ namespace quatrecentquatre\dummydata\services;
 
 use Craft;
 use Yii;
-use craft\base\Component;
-use craft\elements\User;
 use Exception;
-use quatrecentquatre\dummydata\DummyData;
+use craft\elements\User;
+use craft\helpers\Console;
+use quatrecentquatre\dummydata\services\DummyService;
 
-class DummyUserService extends Component
+class DummyUserService extends DummyService
 {
-
-    public $settings;
-    
-    /**
-     * @inheritdoc
-     */
-    public function init() :void
-    {
-        parent::init();
-
-        $this->settings = DummyData::getInstance()->getSettings();
-    }
 
     public function clean() 
     {
@@ -34,6 +22,7 @@ class DummyUserService extends Component
 
         $ignoreUsers = [];
 
+        //Get a list of ids of ignored users with specific domain in their email
         if (!empty($ignoredDomains)) {
             foreach ($ignoredDomains as $domain) {
                 $users = User::find()
@@ -43,6 +32,7 @@ class DummyUserService extends Component
             }
         }
 
+        //Get a list of ids of ignored users from their username
         if (!empty($ignoredUsername)) {
             foreach ($ignoredUsername as $username) {
                 $users = User::find()
@@ -52,18 +42,21 @@ class DummyUserService extends Component
             }
         }
 
+        //Generate a new default password for user
         $hashPassword = Craft::$app->getSecurity()->hashPassword($passwordDefault);
+
+
         try {     
             $results = Yii::$app->db->createCommand("UPDATE users 
-                                        SET username = CONCAT('" . $usernameDefault ."', id), 
-                                            email = CONCAT('" . $usernameDefault ."+', id, '@" . $emailDomainDefault . "'),
-                                            firstName = CONCAT('" . $usernameDefault ."', id),
-                                            lastName = CONCAT('" . $usernameDefault ."', id),
-                                            password = IF(password IS NOT NULL, '" . $hashPassword . "', NULL)
-                                        WHERE id NOT IN ( '" . implode( "', '" , $ignoreUsers ) . "' )")
+                                                    SET username = CONCAT('" . $usernameDefault ."', id), 
+                                                        email = CONCAT('" . $usernameDefault ."+', id, '@" . $emailDomainDefault . "'),
+                                                        firstName = CONCAT('" . $usernameDefault ."', id),
+                                                        lastName = CONCAT('" . $usernameDefault ."', id),
+                                                        password = IF(password IS NOT NULL, '" . $hashPassword . "', NULL)
+                                                    WHERE id NOT IN ( '" . implode( "', '" , $ignoreUsers ) . "' )")
                                         ->execute();
 
-            echo 'Users affected : ' . $results . "\n";
+            Console::stdout("Users affected : " . $results . "\n");
         } catch (Exception $e) {
             Craft::warning("Unable to clean users: {$e->getMessage()}", __METHOD__);
         }
