@@ -81,7 +81,7 @@ class GenerateController extends Controller
         }
 
         $this->settings = DummyData::getInstance()->getSettings();
-/*
+
         //Backup the database
         if((!$this->interactive && $this->backupdb) || 
             ($this->interactive && $this->confirm("Do you want to create a backup of the database before executing the command?"))
@@ -94,7 +94,7 @@ class GenerateController extends Controller
             Console::stdout("Script ended. No changes have been made.\n", Console::FG_RED);
             return;
         }
-*/
+
         if ($this->settings->clean_users) {
             (new DummyUserService)->clean();
         }
