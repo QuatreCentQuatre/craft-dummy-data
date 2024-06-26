@@ -4,29 +4,17 @@ namespace quatrecentquatre\dummydata\services;
 
 use Craft;
 use Yii;
-use Faker;
-use craft\base\Component;
 use Exception;
-use quatrecentquatre\dummydata\DummyData;
+use craft\helpers\Console;
+use quatrecentquatre\dummydata\services\DummyService;
 use quatrecentquatre\dummydata\helpers\DummyDataHelpers;
 
-class DummyCustomTableService extends Component
+class DummyCustomTableService extends DummyService
 {
-
-    public $settings;
-    
-    /**
-     * @inheritdoc
-     */
-    public function init() :void
-    {
-        parent::init();
-
-        $this->settings = DummyData::getInstance()->getSettings();
-    }
 
     public function clean() 
     {  
+        //Get all fields settings for custom tables
         $tablesSettings = collect($this->settings->custom_tables ?? []);
         if (!$tablesSettings->count()) {
             return;
@@ -41,6 +29,9 @@ class DummyCustomTableService extends Component
         }
     }
 
+    /*
+    * Update specific column with random generated data.
+    */
     private function updateCustomField($table, $field) 
     {       
         $fieldName = $field['handle'];
@@ -53,8 +44,8 @@ class DummyCustomTableService extends Component
                                                     )
                                     ->bindValue(':fieldName', $field['value'])
                                     ->execute();
-
-            echo 'Custom table - ' . $table . ' - ' . $fieldName . ' - Items affected : ' . $results . "\n";
+            
+            Console::stdout("Custom table - " . $table . " - " . $fieldName . " - Items affected : " . $results . "\n");
         } catch (Exception $e) {
             Craft::warning("Unable to clean field {$fieldName} in table {$table}: {$e->getMessage()}", __METHOD__);
         }

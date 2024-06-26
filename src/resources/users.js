@@ -7,7 +7,12 @@ function updateValue() {
 
     if (input.value) {
         container.style.maxHeight = container.scrollHeight + "px";
+        setTimeout(() => {
+            container.style.overflow = 'visible';
+            container.style.maxHeight = 'unset';
+        }, 400);
     } else {
+        container.style.overflow = '';
         container.style.maxHeight = null;
     }
 }

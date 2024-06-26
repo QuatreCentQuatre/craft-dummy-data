@@ -9,7 +9,9 @@ use quatrecentquatre\dummydata\services\DummyAssetsService;
 
 class DummyDataHelpers extends Component
 {
-
+    /*
+    * Return value of a specific field type
+    */
     public function getFieldDataByType($type, $default = null)
     {
         $faker = Faker\Factory::create();
