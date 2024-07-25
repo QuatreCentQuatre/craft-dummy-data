@@ -30,18 +30,20 @@ class DummyCustomFieldService extends DummyService
         $entryTypes = $entries->getAllEntryTypes();
         foreach ($entryTypes as $entryType) {
             $customFields = $entryType->getCustomFields();
-            foreach ($customFields as $customField) {
 
-                if ($setting = $fieldsSettings->where('handle', $customField['handle'])->first()) {
-                    $setting['value'] = (new DummyDataHelpers)->getFieldDataByType($setting['type'], ($setting['value'] ?? ''));
-                    //Check if the fields is an assets type or a text type.
-                    if (in_array($setting['type'], $this->assetsType)) {
-                        $this->updateAssetField($customField, $setting);
-                    } else {
-                        $this->updateCustomField($customField, $setting);
+            foreach ($customFields as $customField) {
+                
+                if ($settings = $fieldsSettings->where('handle', $customField['uid'])->collect()) {
+                    foreach ( $settings as $setting ) {
+                        $setting['value'] = (new DummyDataHelpers)->getFieldDataByType($setting['type'], ($setting['value'] ?? ''));
+                        //Check if the fields is an assets type or a text type.
+                        if (in_array($setting['type'], $this->assetsType)) {
+                            $this->updateAssetField($customField, $setting);
+                        } else {
+                            $this->updateCustomField($customField, $setting);
+                        }
                     }
                 }
-
             }
             
         }
