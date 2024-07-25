@@ -60,6 +60,8 @@ The handle key is the handle of your field in your Craft control panel. (The scr
 
 If you choose the type : "custom", you could write a custom value for this specific field.
 
+* Note if a field is used in multiple instance in an entrytype, the field must be select in the dropdown an all of his siblings will be updated.
+
 ![Settings - Custom fields](docs/images/settings-custom-fields.png)
 
 #### Title and slugs
