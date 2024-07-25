@@ -5,8 +5,8 @@ Dummy Data is a CraftCms plugin used to anonymize sensible data in the CraftCms 
 ## Requirements
 
 This plugin requires : 
-- Craft CMS 4.5.0 or later.
-- PHP 8.0.2 or later.
+- Craft CMS 5.0.0 or later.
+- PHP 8.2 or later.
 - Mysql database
 
 ## Installation
@@ -29,7 +29,15 @@ composer require quatrecentquatre/craft-dummy-data
 ./craft plugin/install craft-dummy-data
 ```
 
+#### Validate the installation
+
+![Control panel - Plugin installed](docs/images/plugin-install.png)
+
 ## How it works
+
+With some simple configuration in the settings page of the plugin or with a configuration file in your project, you will be able to replace sensible data with random data.
+
+The plugin can help replace data in user information, in different sections of CraftCMS or in specific tables in the database.
 
 
 ### User
@@ -37,6 +45,10 @@ composer require quatrecentquatre/craft-dummy-data
 In the plugin configuration, you can activate the option to anonymize the user data. You can choose a defaut password, username and domain name to generate the content.
 
 You can also list an array of username or domain to ignore.
+
+* All username and email are concatenate with the row ID in order to be unique.
+
+![Control panel - Users settings](docs/images/settings-users.png)
 
 ### Custom Fields
 
@@ -48,9 +60,17 @@ The handle key is the handle of your field in your Craft control panel. (The scr
 
 If you choose the type : "custom", you could write a custom value for this specific field.
 
+![Settings - Custom fields](docs/images/settings-custom-fields.png)
+
+#### Title and slugs
+
+If you need to overwrite the title field, you can also choose a section and select if you want to replace the title by a certain value and his slug. (The slug will also be updated in the uri field.)
+
+![Settings - Custom fields - Title/Slug](docs/images/settings-custom-fields-title.png)
+
 ### Custom Tables
 
-You can also specify multiple custom tables and select each column that needs to be anonymized.
+You can also specify multiple custom tables and select each column that needs to be anonymized. The custom table needs to be added by a configuration file in the project (See the Config file section below.)
 
 ### Data Types
 
@@ -115,9 +135,9 @@ return [
     ],
     'custom_tables' => [
         [
-            'name' => 'newsletter_users',
+            'name' => 'custom_table_name',
             'custom_fields' => [
-                ['type' => 'email', 'handle' => 'email'],
+                ['type' => 'email', 'handle' => 'custom_table_column'],
             ],
         ]
     ]
@@ -141,6 +161,11 @@ Run the following command in your terminal.
 ```
 php craft dummy-data/generate
 ```
+
+For security purpose, this command can't be run in production and a prompt will ask if you really want to replace your content.
+
+A database backup is recommanded before updating the content of your database and it is recommanded to clear the cache after running the script.
+
 
 ### Roadmap
 

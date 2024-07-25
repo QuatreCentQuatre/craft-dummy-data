@@ -12,6 +12,7 @@ namespace quatrecentquatre\dummydata\console\controllers;
 use Craft;
 use Throwable;
 use yii\console\Controller;
+use craft\helpers\Console;
 use quatrecentquatre\dummydata\DummyData;
 use quatrecentquatre\dummydata\services\DummyUserService;
 use quatrecentquatre\dummydata\services\DummyCustomFieldService;
@@ -75,20 +76,22 @@ class GenerateController extends Controller
         $environment = Craft::$app->getConfig()->env;
 
         if ($environment === 'production') {
-            echo "Can't run this script in production.";
+            Console::stdout("Can't run this script in production.\n", Console::FG_RED);
             return;
         }
 
         $this->settings = DummyData::getInstance()->getSettings();
 
+        //Backup the database
         if((!$this->interactive && $this->backupdb) || 
             ($this->interactive && $this->confirm("Do you want to create a backup of the database before executing the command?"))
         ) {
             $this->backupDb();
         }
 
+        //Validation before overwriting data
         if($this->interactive && !$this->confirm("Are you sure you want to overwrite your data?")){
-            echo "Script ended. No changes have been made.\n";
+            Console::stdout("Script ended. No changes have been made.\n", Console::FG_RED);
             return;
         }
 
@@ -100,25 +103,27 @@ class GenerateController extends Controller
 
         (new DummyCustomTableService)->clean();
 
+        //Clear Application cache if needed
         if((!$this->interactive && $this->clearcache) || 
             ($this->interactive && $this->confirm("Do you want to clear the application cache?"))
         ) {
             Craft::$app->elements->invalidateAllCaches();
-            echo "Clearing all caches\n";
+
+            Console::stdout("Clearing all caches.\n", Console::FG_GREEN);
         }
 
-        echo "Script ended\n";
+        Console::stdout("Script ended.\n");
     }
 
     private function backupDb()
     {
         try {
             $backupPath = Craft::$app->getDb()->backup();
-            echo "Your backup is located at : " . $backupPath . "\n";
+            Console::stdout("Your backup is located at : " . $backupPath . "\n");
         } catch (Throwable $e) {
             Craft::error('Error backing up the database: ' . $e->getMessage(), __METHOD__);
             
-            echo "An error occurred while backing up the database\n";
+            Console::stdout("An error occurred while backing up the database.\n", Console::FG_RED);
             exit();
         }
     }
