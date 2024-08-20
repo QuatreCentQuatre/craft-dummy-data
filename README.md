@@ -1,6 +1,6 @@
 # Dummy Data
 
-Dummy Data is a CraftCms plugin used to anonymize sensible data in the CraftCms database with dummy data.
+Dummy Data is a CraftCms plugin used to anonymize sensible data in the database with dummy data.
 
 ## Requirements
 
@@ -166,7 +166,7 @@ php craft dummy-data/generate
 
 For security purpose, this command can't be run in production and a prompt will ask if you really want to replace your content.
 
-A database backup is recommanded before updating the content of your database and it is recommanded to clear the cache after running the script.
+A database backup is advice before updating the content of your database and it is recommended to clear the cache after running the script.
 
 
 ### Roadmap
@@ -175,4 +175,6 @@ A database backup is recommanded before updating the content of your database an
 - Edit custom table in Control Panel
 - Add complex mode. Modify each entries individually with different data with queue system
 
-Develop by [QuatreCentQuatre](https://www.quatrecentquatre.com)
+### Credits
+Developped by : [QuatreCentQuatre](https://www.quatrecentquatre.com)<br>
+Developper : [Robin Gauthier](https://github.com/robin-gauthier)
