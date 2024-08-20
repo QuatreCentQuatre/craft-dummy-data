@@ -64,7 +64,7 @@ class DummyDataHelpers extends Component
         foreach (Craft::$app->getFields()->getAllFields() as $field) {
             $fields[] = [
                 'label' => $field['name'] . ' (' . $field['handle'] . ')',
-                'value' => $field['handle'],
+                'value' => $field['uid'],
             ];
         }
 
