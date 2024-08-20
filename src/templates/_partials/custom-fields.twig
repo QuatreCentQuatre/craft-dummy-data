@@ -51,25 +51,25 @@
 
 
 {{ forms.editableTableField({
-    label: "Custom Fields"|t('app'),
-    instructions: "List of CraftCms fields to anonymize. Fill Custom value column if the field type is custom"|t('app'),
+    label: "Custom Fields"|t('dummydata'),
+    instructions: "List of fields to anonymize."|t('dummydata'),
     id: 'custom_fields',
     name: 'custom_fields',
     cols: {
         handle: {
             type: 'select',
-            heading: "Field Handle"|t('app'),
+            heading: "Field Handle"|t('dummydata'),
             options : fields_list, 
         },
         type: {
             type: 'select',
-            heading: "Type"|t('app'),
+            heading: "Type"|t('dummydata'),
             options : typeOptions,
             class : 'type-column',
         },
         value: {
             type: 'singleline',
-            heading: "Custom value"|t('app'),
+            heading: "Custom value"|t('dummydata'),
             class : 'custom-value-column',
         },
     }|filter,
@@ -79,29 +79,29 @@
 }) }}
 
 {{ forms.editableTableField({
-    label: "Section Title"|t('app'),
-    instructions: "List of CraftCms sections title to anonymize. Fill Custom value column if the field type is custom"|t('app'),
+    label: "Section Title"|t('dummydata'),
+    instructions: "List of sections title to anonymize."|t('dummydata'),
     id: 'section_title',
     name: 'section_title',
     cols: {
         handle: {
             type: 'select',
-            heading: "Section Handle"|t('app'),
+            heading: "Section Handle"|t('dummydata'),
             options : sections_list,
         },
         slug: {
             type: 'checkbox',
-            heading: "Also replace slug"|t('app'),
+            heading: "Also replace slug"|t('dummydata'),
         },
         type: {
             type: 'select',
-            heading: "Type"|t('app'),
+            heading: "Type"|t('dummydata'),
             options : textOptions,
             class : 'type-column',
         },
         value: {
             type: 'singleline',
-            heading: "Custom value"|t('app'),
+            heading: "Custom value"|t('dummydata'),
             class : 'custom-value-column',
         },
     }|filter,
