@@ -1,7 +1,7 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.lightswitchField({
-    label: 'Users fields.'|t('dummydata'),
+    label: 'Users fields'|t('dummydata'),
     instructions: 'Do you want to obfuscate the data of your users fields'|t('dummydata'),
     id: 'clean_users',
     name: 'clean_users',
@@ -11,7 +11,7 @@
 <div id="subfields">
 
     {{ forms.textField({
-        label: 'Default password.'|t('dummydata'),
+        label: 'Default password'|t('dummydata'),
         instructions: 'Default password to inject in user table.'|t('dummydata'),
         id: 'users_defaultPassword',
         name: 'users_defaultPassword',
@@ -19,7 +19,7 @@
     }) }}
 
     {{ forms.textField({
-        label: 'Default username placeholder.'|t('dummydata'),
+        label: 'Default username placeholder'|t('dummydata'),
         instructions: 'Default name to inject in user table.'|t('dummydata'),
         id: 'users_usernameDefault',
         name: 'users_usernameDefault',
@@ -27,7 +27,7 @@
     }) }}
 
     {{ forms.textField({
-        label: 'Default domain.'|t('dummydata'),
+        label: 'Default domain'|t('dummydata'),
         instructions: 'Default domain used to create email.'|t('dummydata'),
         id: 'users_emailDomainDefault',
         name: 'users_emailDomainDefault',
@@ -35,14 +35,14 @@
     }) }}
 
     {{ forms.editableTableField({
-        label: "Ignore Username"|t('app'),
-        instructions: "List of users to ignore"|t('app'),
+        label: "Ignore Username"|t('dummydata'),
+        instructions: "List of users to ignore"|t('dummydata'),
         id: 'users_ignoredUsername',
         name: 'users_ignoredUsername',
         cols: {
             username: {
                 type: 'singleline',
-                heading: "Username"|t('app'),
+                heading: "Username"|t('dummydata'),
             }
         }|filter,
         rows: settings.users_ignoredUsername,
@@ -51,14 +51,14 @@
     }) }}
 
     {{ forms.editableTableField({
-        label: "Ignore Domains"|t('app'),
-        instructions: "List of email domains to ignore"|t('app'),
+        label: "Ignore Domains"|t('dummydata'),
+        instructions: "List of email domains to ignore"|t('dummydata'),
         id: 'users_ignoredDomains',
         name: 'users_ignoredDomains',
         cols: {
             domain: {
                 type: 'singleline',
-                heading: "Domains"|t('app'),
+                heading: "Domains"|t('dummydata'),
             }
         }|filter,
         rows: settings.users_ignoredDomains,
