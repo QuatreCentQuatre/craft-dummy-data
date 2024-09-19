@@ -1,6 +1,14 @@
 # Dummy Data
 
-Dummy Data is a CraftCms plugin used to anonymize sensible data in the CraftCms database with dummy data.
+Dummy Data is a CraftCms plugin used to anonymize sensible data in the database with dummy data. 
+
+This plugin was created to comply with new privacy laws in Canada that require personal data to be accessible only on the production environment. These measures are also recommended in Europe with the GDPR.
+
+To configure your project, you will need to map the fields that need to be anonymized to the data type they represent. Your configuration is saved in the project config files of CraftCMS and every development environment will have access to this feature.
+
+A console command is provided to run the anonymization of your project. 
+
+*Note: the script will not run if your website is in production mode.
 
 ## Requirements
 
