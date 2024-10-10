@@ -62,7 +62,7 @@ class DummyCustomFieldService extends DummyService
             $fieldName = '$."' . $field->layoutElement->uid . '"';
 
             $results = Yii::$app->db->createCommand(
-                                                    "UPDATE elements_sites 
+                                                    "UPDATE ".$this->tablePrefix."elements_sites 
                                                     SET content = JSON_SET(content, '".$fieldName."', :fieldValue)
                                                     WHERE JSON_EXTRACT(content, '".$fieldName."') IS NOT NULL"
                                                 )
@@ -80,7 +80,7 @@ class DummyCustomFieldService extends DummyService
         //get all assets ids for a specific field ID
         $assetsIds = Yii::$app->db->createCommand(
                                                     "SELECT DISTINCT(targetId) 
-                                                    FROM relations 
+                                                    FROM ".$this->tablePrefix."relations 
                                                     WHERE fieldId =:fieldId AND targetId <> :dummyFileId"
                                                 )
                                     ->bindValue(':fieldId', $field->id)
@@ -89,7 +89,7 @@ class DummyCustomFieldService extends DummyService
 
         try {
             //Replace all relation to dummy file
-            Yii::$app->db->createCommand("UPDATE relations
+            Yii::$app->db->createCommand("UPDATE ".$this->tablePrefix."relations
                                     SET targetId =:fileId
                                     WHERE fieldId =:fieldId")
                         ->bindValue(':fileId', $setting['value']->id)
@@ -111,12 +111,11 @@ class DummyCustomFieldService extends DummyService
 
     private function updateTitleField()
     {
-        $sectionsSettings = collect($this->settings->section_title ?? []);
-        if (!$sectionsSettings->count()) {
-            return;
-        }
-
+        $sectionsSettings = collect($this->settings->section_title);
+        
         foreach ($sectionsSettings as $section) {
+
+            if(!isset($section['handle'])) { continue; }
 
             $sectionCraft = Craft::$app->getEntries()->getSectionByHandle($section['handle']);
             if (!$sectionCraft) {
@@ -126,11 +125,11 @@ class DummyCustomFieldService extends DummyService
             $value = (new DummyDataHelpers)->getFieldDataByType($section['type'], ($section['value'] ?? ''));
 
             $contentIds = Yii::$app->db->createCommand(
-                                                    "SELECT distinct(elements.id)
-                                                    FROM sections 
-                                                    INNER JOIN entries ON entries.sectionId = sections.id
-                                                    INNER JOIN elements ON elements.id = entries.id
-                                                    INNER JOIN elements_sites ON elements_sites.elementId = elements.id
+                                                    "SELECT distinct(".$this->tablePrefix."elements.id)
+                                                    FROM ".$this->tablePrefix."sections 
+                                                    INNER JOIN ".$this->tablePrefix."entries ON ".$this->tablePrefix."entries.sectionId = ".$this->tablePrefix."sections.id
+                                                    INNER JOIN ".$this->tablePrefix."elements ON ".$this->tablePrefix."elements.id = ".$this->tablePrefix."entries.id
+                                                    INNER JOIN ".$this->tablePrefix."elements_sites ON ".$this->tablePrefix."elements_sites.elementId = ".$this->tablePrefix."elements.id
                                                     WHERE handle = :sectionHandle"
                                                 )
                                         ->bindValue(':sectionHandle', $section['handle'])
@@ -142,7 +141,7 @@ class DummyCustomFieldService extends DummyService
                 }
 
                 //Replace title content for section
-                $results = Yii::$app->db->createCommand("UPDATE elements_sites
+                $results = Yii::$app->db->createCommand("UPDATE ".$this->tablePrefix."elements_sites
                                                             SET title = :title
                                                             WHERE elementId IN ( '" . implode( "', '" , $contentIds ) . "' )")
                                         ->bindValue(':title', $value)
@@ -159,7 +158,7 @@ class DummyCustomFieldService extends DummyService
                     foreach($sectionCraft->getSiteSettings() as $site) {
                         $uri = str_replace('{slug}', $slug, $site->uriFormat);
 
-                        $results = Yii::$app->db->createCommand("UPDATE elements_sites
+                        $results = Yii::$app->db->createCommand("UPDATE ".$this->tablePrefix."elements_sites
                                                                 SET slug = CONCAT('" . $slug ."-', id),
                                                                     uri = CONCAT('" . $uri ."-', id)
                                                                 WHERE elementId IN ( '" . implode( "', '" , $contentIds ) . "' )")
