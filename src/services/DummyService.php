@@ -10,6 +10,8 @@ class DummyService extends Component
 {
 
     public $settings;
+
+    public $tablePrefix;
     
     /**
      * @inheritdoc
@@ -19,6 +21,9 @@ class DummyService extends Component
         parent::init();
 
         $this->settings = DummyData::getInstance()->getSettings();
+
+        $db = Craft::$app->getDb();
+        $this->tablePrefix = $db->tablePrefix;
     }
 
 }

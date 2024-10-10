@@ -47,7 +47,7 @@ class DummyUserService extends DummyService
 
 
         try {     
-            $results = Yii::$app->db->createCommand("UPDATE users 
+            $results = Yii::$app->db->createCommand("UPDATE ".$this->tablePrefix."users 
                                                     SET username = CONCAT('" . $usernameDefault ."', id), 
                                                         email = CONCAT('" . $usernameDefault ."+', id, '@" . $emailDomainDefault . "'),
                                                         firstName = CONCAT('" . $usernameDefault ."', id),
